@@ -120,8 +120,11 @@ Font.prototype.forEachGlyph = function(text, x, y, fontSize, options, callback) 
     y = y !== undefined ? y : 0;
     fontSize = fontSize !== undefined ? fontSize : 72;
     options = options || {};
+
     var kerning = options.kerning === undefined ? true : options.kerning;
+    var letterSpacing = options.letterSpacing === undefined ? 0 : options.letterSpacing;
     var fontScale = 1 / this.unitsPerEm * fontSize;
+
     var glyphs = this.stringToGlyphs(text);
     for (var i = 0; i < glyphs.length; i += 1) {
         var glyph = glyphs[i];
@@ -133,6 +136,10 @@ Font.prototype.forEachGlyph = function(text, x, y, fontSize, options, callback) 
         if (kerning && i < glyphs.length - 1) {
             var kerningValue = this.getKerningValue(glyph, glyphs[i + 1]);
             x += kerningValue * fontScale;
+        }
+
+        if(i < glyphs.length - 1) {
+            x += letterSpacing * fontScale;
         }
     }
 };
